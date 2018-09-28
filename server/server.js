@@ -16,9 +16,38 @@ app.use(express.static(publicVarable));
 
 io.on('connection',(socket)=>{    // listeening for an event and providing calll back funciton
      console.log('new user connected..');
+    
+    //  socket.on('newMessage',function(nMessage){  //listening to the newMessage
+    //     console.log('welcome ',nMessage);
+    // });
+    
+    // socket.emit('newMessage',{
+    //     from:'someone',
+    //     text:'sometext'
+    // });
 
 
-     socket.on('disconnect',()=>{
+    socket.on('createMessage',function(message){
+        console.log('createMessage',message);
+        io.emit('newMessage',{
+            from:message.from,
+            text:message.text,
+            createdAt:new Date().getTime()
+        });
+    });
+
+
+    //  socket.emit('newEmail',{   //creating  custom event newEmail
+    //     from: 'example@mail.com',
+    //     text: 'sometext',
+    //     createAt: new Date().getTime()
+    //  });
+
+    //  socket.on('createEmail',(newMail)=>{
+    //      console.log('createEmail',newMail);
+    //  })
+
+     socket.on('disconnect',()=>{   //listening for disconnect event..
         console.log('user was disconnected..');
      })
 })
