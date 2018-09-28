@@ -9,40 +9,20 @@ console.log(__dirname + '/public');
 
 var app = express();
 const port = process.env.PORT || 3000;
-var server = http.createServer(app);
+var server = http.createServer(app);    /// creating server with http
 var io = socketIO(server);
 
 app.use(express.static(publicVarable));
 
-io.on('connection',(socket) =>{
-    console.log('user was connected..');
-    
-
-    socket.on('createMessage',(message)=>{
-       console.log('create Message',message);
-        
-        io.emit('newMessage',{
-            from: message.from,
-            text: message.text,
-            createAt:new Date().getTime()
-        })
-
-    });
-    
+io.on('connection',(socket)=>{    // listeening for an event and providing calll back funciton
+     console.log('new user connected..');
 
 
+     socket.on('disconnect',()=>{
+        console.log('user was disconnected..');
+     })
+})
 
-
-
-    // Event that i want to listen to is newEmail
-    
-
-    socket.on('disconnect',()=>{
-        console.log('User was disconnected from servers');
-    });
-
+server.listen(port,() =>{   //can use app.server also
+    console.log(`server is up on ${port}`);
 });
-
-server.listen(port, ()=>{
-    console.log('server is up on '+ port);
-});  
